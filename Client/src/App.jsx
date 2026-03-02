@@ -1,12 +1,17 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/router";
-
+import { AuthProvider } from "./context/AuthContext";
+import WhatsAppButton from "./Components/WhatsAppButton";
 function App() {
   return (
     <>
       <div>
+      
+        <AuthProvider>
         {/* <h1>Dr.Clean</h1> */}
+          <WhatsAppButton />
         <RouterProvider router={router} />
+        </AuthProvider>
       </div>
     </>
   );

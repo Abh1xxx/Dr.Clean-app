@@ -1,93 +1,82 @@
-// import React from 'react'
-
-// function HomePage() {
-//   return (
-//     <div>HomePage</div>
-//   )
-// }
-
-// export default HomePage
-
 import React from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
 
 function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-blue-900 text-white py-20 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Welcome to Dr. Clean Facility Management Service
+      {/* HERO SECTION */}
+      <section className="bg-blue-900 text-white py-24 text-center px-4">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          Professional Cleaning <br /> You Can Trust
         </h1>
-        <p className="text-lg mb-8 max-w-2xl mx-auto">
-          Professional cleaning services for homes, offices, and industries.
-          Experience hygiene, perfection, and care with our trusted team.
-        </p>
-        <Link
-          to="/contact"
-          className="bg-white text-blue-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100"
-        >
-          Get a Free Quote
-        </Link>
-      </section>
 
-      {/* Services Section */}
-      <section className="py-16 bg-gray-100">
-        <h2 className="text-3xl font-bold text-center mb-10 text-blue-900">
-          Our Services
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-          {[
-            {
-              title: "Water Tank Cleaning",
-              img: "https://source.unsplash.com/400x300/?water,cleaning",
-            },
-            {
-              title: "House & Office Cleaning",
-              img: "https://source.unsplash.com/400x300/?office,cleaning",
-            },
-            {
-              title: "Roof & Board Cleaning",
-              img: "https://source.unsplash.com/400x300/?roof,cleaning",
-            },
-            {
-              title: "Glass Cleaning",
-              img: "https://source.unsplash.com/400x300/?glass,cleaning",
-            },
-            {
-              title: "Staffing Solutions",
-              img: "https://source.unsplash.com/400x300/?team,cleaning",
-            },
-            {
-              title: "Disinfection Service",
-              img: "https://source.unsplash.com/400x300/?disinfection,cleaning",
-            },
-          ].map((service, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-            >
-              <img
-                src={service.img}
-                alt={service.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-5 text-center">
-                <h3 className="text-xl font-semibold text-blue-900 mb-2">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  We provide professional {service.title.toLowerCase()} with
-                  advanced equipment and expert staff.
-                </p>
-              </div>
-            </div>
-          ))}
+        <p className="text-lg max-w-2xl mx-auto mb-8 text-gray-200">
+          Reliable home and office cleaning services with trained staff,
+          modern equipment, and guaranteed satisfaction.
+        </p>
+
+        <div className="flex justify-center gap-4">
+          <Link
+            to="/services"
+            className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+          >
+            View Services
+          </Link>
+
+          <Link
+            to="/about"
+            className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition"
+          >
+            Learn More
+          </Link>
         </div>
       </section>
 
-     
+      {/* TRUST SECTION */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-center">
+          <div className="bg-white p-8 shadow rounded-lg">
+            <h3 className="text-xl font-semibold mb-2 text-blue-900">
+              100+ Happy Clients
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Trusted by families and businesses.
+            </p>
+          </div>
+
+          <div className="bg-white p-8 shadow rounded-lg">
+            <h3 className="text-xl font-semibold mb-2 text-blue-900">
+              Professional Team
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Skilled and trained cleaning experts.
+            </p>
+          </div>
+
+          <div className="bg-white p-8 shadow rounded-lg">
+            <h3 className="text-xl font-semibold mb-2 text-blue-900">
+              Affordable Pricing
+            </h3>
+            <p className="text-gray-600 text-sm">
+              High-quality service at competitive rates.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="py-20 bg-blue-900 text-center text-white">
+        <h2 className="text-3xl font-bold mb-6">
+          Ready to Book a Cleaning Service?
+        </h2>
+
+        <Link
+          to="/services"
+          className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+        >
+          Get Started
+        </Link>
+      </section>
     </>
   );
 }

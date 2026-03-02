@@ -1,7 +1,7 @@
 // controllers/bookingController.js
 const bookingModel = require("../Models/bookingModel");
 const userModel = require("../Models/userModel");
-
+const AssignedJob = require("../Models/assignedJobModel");
 // 📌 Create new booking
 const createBooking = async (req, res, next) => {
   try {
@@ -38,6 +38,7 @@ const getAllBookings = async (req, res, next) => {
   try {
     console.log("👉 [getAllBookings] Fetching all bookings...");
 
+    
     const bookings = await bookingModel
       .find()
       .populate("userId", "name email phone")
@@ -115,12 +116,12 @@ const assignBookingToWorker = async (req, res, next) => {
         .json({ message: "Worker not found or not a worker" });
     }
 
-    // ➕ Add this booking to the worker's assignedJobs array
-    worker.assignedJobs.push(bookingId);
-    await worker.save(); // save updated worker
-    console.log(
-      `✅ Booking ${bookingId} added to worker ${worker.name} assignedJobs`
-    );
+    // // ➕ Add this booking to the worker's assignedJobs array
+    // worker.assignedJobs.push(bookingId);
+    // await worker.save(); // save updated worker
+    // console.log(
+    //   `✅ Booking ${bookingId} added to worker ${worker.name} assignedJobs`
+    // );
 
     // 🔄 Find the booking first
     const booking = await bookingModel.findById(bookingId);
@@ -129,6 +130,12 @@ const assignBookingToWorker = async (req, res, next) => {
       console.log("❌ Booking not found with ID:", bookingId);
       return res.status(404).json({ message: "Booking not found" });
     }
+
+    // Create AssignedJob entry
+    const assignedJob = await AssignedJob.create({
+      bookingId,
+      workerId,
+    });
 
     // ✅ Update booking status to "confirmed"
     booking.status = "confirmed";
@@ -139,8 +146,7 @@ const assignBookingToWorker = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Booking assigned to worker successfully",
-      worker,
-      booking,
+      assignedJob
     });
     console.log("✅ Response sent successfully");
   } catch (error) {

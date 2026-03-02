@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { dbConnection } = require("./config/dbConnection");
 const router = require("./Routes");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -9,6 +10,17 @@ const app = express();
 
 // ================= Middleware =================
 app.use(express.json()); // Parse JSON requests
+
+// app.use(cors({
+//   origin: "*" 
+// }));
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 // ================= DB Connection ==============
 dbConnection();

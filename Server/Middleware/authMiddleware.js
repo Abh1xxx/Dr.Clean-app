@@ -19,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
         // If no token is provided, return an error response
         if (!authToken) {
             console.log("❌ No Auth Token Found");
-            return res.json({ status: false, message: "No auth token" });
+            return res.status(401).json({ status: false, message: "No auth token" });
         }
  
         // Decoding and verifying the token using the secret key
@@ -30,7 +30,7 @@ const authMiddleware = async (req, res, next) => {
         const user = await userModel.findOne({ _id: decoded.id });
         if (!user) {
             console.log("❌ User Not Found in Database");
-            return res.json({ status: false, message: "User not Found" });
+            return res.status(401).json({ status: false, message: "User not Found" });
         }
 
         // Attaching the decoded user ID to the request object for further use
@@ -41,7 +41,7 @@ const authMiddleware = async (req, res, next) => {
         next(); // Proceed to the next middleware or controller
     } catch (error) {
         console.error("❌ Authentication Error:", error.message);
-        return res.json({ loginfail: true, status: false, message: "Please Login" });
+        return res.status(401).json({ loginfail: true, status: false, message: "Please Login" });
     }
 };
 

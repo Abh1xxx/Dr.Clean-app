@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
+    phone: { type: String },
     password: { type: String, required: true },
     address: { type: String },
     role: {
@@ -24,12 +24,12 @@ const userSchema = new mongoose.Schema(
       enum: ["customer", "admin", "worker"],
       default: "customer",
     },
-    assignedJobs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Booking",
-      },
-    ],
+    // assignedJobs: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Booking",
+    //   },
+    // ],
 
     profilePic: {
       type: String,
