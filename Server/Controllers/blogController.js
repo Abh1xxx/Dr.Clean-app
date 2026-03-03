@@ -59,6 +59,21 @@ const getAllBlogs = async (req, res, next) => {
   }
 };
 
+// ================= GET ALL BLOGS (Admin) =================
+const getAllBlogsForAdmin = async (req, res, next) => {
+  try {
+    const blogs = await blogModel
+      .find()
+      .populate("createdBy", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, blogs });
+  } catch (error) {
+    console.error("❌ getAllBlogsForAdmin Error:", error.message);
+    next(error);
+  }
+};
+
 // ================= GET SINGLE BLOG =================
 const getBlogById = async (req, res, next) => {
   try {
@@ -153,6 +168,7 @@ const deleteBlog = async (req, res, next) => {
 module.exports = {
   createBlog,
   getAllBlogs,
+  getAllBlogsForAdmin,
   getBlogById,
   updateBlog,
   deleteBlog,

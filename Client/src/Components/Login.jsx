@@ -24,7 +24,13 @@ function Login() {
       // Save user & token using context
       login(res.data.user, res.data.token);
 
-      navigate("/dashboard");
+      if (res.data.user.role === "admin") {
+        navigate("/admin");
+      } else if (res.data.user.role === "worker") {
+        navigate("/worker");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
     } finally {
@@ -40,9 +46,7 @@ function Login() {
         </h2>
 
         {/* Google Login Button (UI only) */}
-        <button
-          className="w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition mb-4"
-        >
+        <button className="w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition mb-4">
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="google"
@@ -75,9 +79,7 @@ function Login() {
           </div>
 
           <div>
-            <label className="block mb-1 text-gray-700 text-sm">
-              Password
-            </label>
+            <label className="block mb-1 text-gray-700 text-sm">Password</label>
             <input
               type="password"
               name="password"

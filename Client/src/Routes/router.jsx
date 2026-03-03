@@ -10,13 +10,7 @@ import Signup from "../Components/Signup";
 // Protected Pages
 import Dashboard from "../Pages/Dashboard";
 
-// Future Pages (create these empty for now)
 import Services from "../Pages/Services";
-// import MyBookings from "../Pages/MyBookings";
-// import AdminPanel from "../Pages/AdminPanel";
-// import AssignedJobs from "../Pages/AssignedJobs";
-// import Blog from "../Pages/Blog";
-// import About from "../Pages/About";
 
 // Route Protection
 import ProtectedRoute from "../Components/ProtectedRoute";
@@ -26,13 +20,27 @@ import About from "../Pages/About";
 import SingleBlog from "../Pages/SingleBlog";
 import MyBookings from "../Components/MyBookings";
 import BookService from "../Pages/BookService";
+import Profile from "../Pages/Profile";
+import EditProfile from "../Pages/EditProfile";
+import ProfileSecurity from "../Pages/ProfileSecurity";
+import WorkerDashboard from "../Pages/WorkerDashboard";
+import AssignedJobs from "../Pages/AssignedJobs";
+import WorkerProfile from "../Pages/WorkerProfile";
+import WorkerSecurity from "../Pages/WorkerSecurity";
+import WorkerEditProfile from "../Pages/WorkerEditProfile";
+import AdminWorkers from "../Pages/AdminWorkers";
+import AdminBookings from "../Pages/AdminBookings";
+import AdminServices from "../Pages/AdminServices";
+import AdminDashboard from "../Pages/AdminDashboard";
+import AdminBlogs from "../Pages/AdminBlogs";
+import AdminProfile from "../Pages/AdminProfile";
+import AdminEditProfile from "../Pages/AdminEditProfile";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
-      // 🌍 PUBLIC ROUTES
       {
         index: true,
         element: <HomePage />,
@@ -57,8 +65,6 @@ export const router = createBrowserRouter([
         path: "about",
         element: <About />,
       },
-
-      // 🔒 COMMON AUTH ROUTE
       {
         path: "my-bookings",
         element: (
@@ -76,6 +82,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "dashboard",
         element: (
           <ProtectedRoute>
@@ -83,38 +97,118 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
-      // 👤 CUSTOMER ROUTE
-      // {
-      //   path: "my-bookings",
-      //   element: (
-      //     <ProtectedRoute role="customer">
-      //       <MyBookings />
-      //     </ProtectedRoute>
-      //   ),
-      // },
-
-      // 🛠 WORKER ROUTE
-      // {
-      //   path: "assigned-jobs",
-      //   element: (
-      //     <ProtectedRoute role="worker">
-      //       <AssignedJobs />
-      //     </ProtectedRoute>
-      //   ),
-      // },
-
-      // 👑 ADMIN ROUTE
-      // {
-      //   path: "admin",
-      //   element: (
-      //     <ProtectedRoute role="admin">
-      //       <AdminPanel />
-      //     </ProtectedRoute>
-      //   ),
-      // },
-
-      // 🌐 SERVICES (public view, but booking inside protected)
+      {
+        path: "profile/edit",
+        element: (
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile/security",
+        element: (
+          <ProtectedRoute>
+            <ProfileSecurity />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "worker",
+        element: (
+          <ProtectedRoute role="worker">
+            <WorkerDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "assigned-jobs",
+        element: (
+          <ProtectedRoute role="worker">
+            <AssignedJobs />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "worker/profile",
+        element: (
+          <ProtectedRoute role="worker">
+            <WorkerProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "worker/profile/edit",
+        element: (
+          <ProtectedRoute role="worker">
+            <WorkerEditProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "worker/profile/security",
+        element: (
+          <ProtectedRoute role="worker">
+            <WorkerSecurity />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/services",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminServices />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/bookings",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminBookings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/workers",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminWorkers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/profile",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/profile/edit",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminEditProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/blogs",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminBlogs />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "services",
         element: <Services />,

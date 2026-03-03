@@ -4,6 +4,7 @@ const express = require("express");
 const {
   createBlog,
   getAllBlogs,
+  getAllBlogsForAdmin,
   getBlogById,
   updateBlog,
   deleteBlog,
@@ -21,6 +22,7 @@ blogRoutes.post(
   upload.array("media", 5),
   createBlog
 );
+blogRoutes.get("/admin/all", checkAdminAuth, getAllBlogsForAdmin);
 
 // Public
 blogRoutes.get("/all", getAllBlogs);

@@ -1,119 +1,102 @@
 import React, { useState } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
 
   const role = user?.role;
 
-  const navigation = [
-    { name: "Home", to: "/" },
-    { name: "Services", to: "/services" },
-    { name: "Blog", to: "/blog" },
-    { name: "About", to: "/about" },
+  let navigation = [];
 
-    ...(role === "customer"
-      ? [{ name: "My Bookings", to: "/my-bookings" }]
-      : []),
+  if (!user) {
+    navigation = [
+      { name: "Home", to: "/" },
+      { name: "Services", to: "/services" },
+      { name: "Blog", to: "/blog" },
+      { name: "About", to: "/about" },
+      { name: "Login", to: "/login" },
+      { name: "Signup", to: "/signup" },
+    ];
+  } else if (role === "customer") {
+    navigation = [
+      { name: "Home", to: "/" },
+      { name: "Services", to: "/services" },
+      { name: "My Bookings", to: "/my-bookings" },
+      { name: "Blog", to: "/blog" },
+      { name: "About", to: "/about" },
+    ];
+  } else if (role === "worker") {
+    navigation = [
+      { name: "Dashboard", to: "/worker" },
+      { name: "Assigned Jobs", to: "/assigned-jobs" },
+      { name: "Blog", to: "/blog" },
+      { name: "About", to: "/about" },
+    ];
+  } else if (role === "admin") {
+    navigation = [
+      { name: "Dashboard", to: "/admin" },
+      { name: "Services", to: "/admin/services" },
+      { name: "Bookings", to: "/admin/bookings" },
+      { name: "Workers", to: "/admin/workers" },
+      { name: "Manage Blogs", to: "/admin/blogs" },
+      { name: "Blog", to: "/blog" },
+      { name: "About", to: "/about" },
+    ];
+  }
 
-    ...(role === "worker"
-      ? [{ name: "Assigned Jobs", to: "/assigned-jobs" }]
-      : []),
-
-    ...(role === "admin"
-      ? [{ name: "Admin Panel", to: "/admin" }]
-      : []),
-
-    ...(!user
-      ? [
-          { name: "Login", to: "/login" },
-          { name: "Signup", to: "/signup" },
-        ]
-      : []),
-  ];
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-    setProfileOpen(false);
-    setIsOpen(false);
+  const getProfilePath = () => {
+    if (role === "admin") return "/admin/profile";
+    if (role === "worker") return "/worker/profile";
+    return "/profile";
   };
 
   return (
     <nav className="bg-blue-900 text-white sticky top-0 z-50 shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-
-        {/* Logo */}
         <Link to="/" className="text-xl font-bold tracking-wide">
           Dr. Clean
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex gap-6 items-center">
-
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.to}
               className={({ isActive }) =>
-                `transition ${
-                  isActive
-                    ? "text-white font-semibold"
-                    : "text-white/80 hover:text-white"
-                }`
+                isActive
+                  ? "font-semibold text-white"
+                  : "text-white/80 hover:text-white"
               }
             >
               {item.name}
             </NavLink>
           ))}
 
-          {/* Profile Button (Only if logged in) */}
           {user && (
-            <div className="relative">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 bg-white text-blue-900 px-3 py-1 rounded-lg font-semibold"
-              >
-                👤
-              </button>
-
-              {profileOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white text-blue-900 rounded-lg shadow-lg overflow-hidden">
-                  <Link
-                    to="/profile"
-                    onClick={() => setProfileOpen(false)}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Profile
-                  </Link>
-
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+            <Link
+              to={getProfilePath()}
+              className="block"
+              aria-label="Open profile"
+            >
+              <img
+                src={user?.profilePic}
+                alt="profile"
+                className="w-10 h-10 rounded-full object-cover border-2 border-white/70"
+              />
+            </Link>
           )}
         </div>
 
-        {/* Mobile Hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-white text-2xl"
         >
-          ☰
+          =
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-blue-800 px-4 pb-4 space-y-3">
           {navigation.map((item) => (
@@ -127,23 +110,20 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {/* Mobile Profile Section */}
           {user && (
-            <div className="border-t border-white/30 pt-3 space-y-2">
+            <div className="border-t border-white/30 pt-3">
               <Link
-                to="/profile"
+                to={getProfilePath()}
                 onClick={() => setIsOpen(false)}
-                className="block"
+                className="inline-flex items-center gap-2"
               >
-                👤 Profile
+                <img
+                  src={user?.profilePic}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full object-cover border border-white/40"
+                />
+                <span>Profile</span>
               </Link>
-
-              <button
-                onClick={handleLogout}
-                className="block bg-white text-blue-900 px-4 py-1 rounded-lg"
-              >
-                Logout
-              </button>
             </div>
           )}
         </div>

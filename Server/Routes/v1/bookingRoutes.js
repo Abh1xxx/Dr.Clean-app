@@ -15,16 +15,21 @@ const bookingRoutes = express.Router();
 bookingRoutes.post("/createBooking", authMiddleware, createBooking);
 
 // 📌 Get all bookings (Admin)
-bookingRoutes.get("/getAllBookings", checkAdminAuth, getAllBookings);
+bookingRoutes.get("/getAllBookings", authMiddleware, checkAdminAuth, getAllBookings);
 
 // 📌 Get bookings of a specific user
 bookingRoutes.get("/getUserBookings", authMiddleware, getUserBookings);
 
 // 📌 Update booking status (Admin)
-bookingRoutes.put("/update/:id", updateBookingStatus);
+bookingRoutes.put("/update/:id", authMiddleware, checkAdminAuth, updateBookingStatus);
 
 // 📌 Assign a booking to a worker (Admin only)
-bookingRoutes.post("/assignWorker", checkAdminAuth, assignBookingToWorker);
+bookingRoutes.post(
+  "/assignWorker",
+  authMiddleware,
+  checkAdminAuth,
+  assignBookingToWorker
+);
 
 
 module.exports = bookingRoutes;
