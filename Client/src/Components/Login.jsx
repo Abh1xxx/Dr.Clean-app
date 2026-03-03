@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../Axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
