@@ -37,7 +37,9 @@ function AdminDashboard() {
         setStats(statsRes.data || {});
         setRecentBookings((bookingsRes.data?.bookings || []).slice(0, 5));
       } catch (err) {
-        setError("Could not load dashboard data. Please refresh and try again.");
+        setError(
+          "Could not load dashboard data. Please refresh and try again.",
+        );
       } finally {
         setLoading(false);
       }
@@ -69,7 +71,11 @@ function AdminDashboard() {
         )}
 
         <section className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
-          <StatCard title="Total Users" value={stats.totalUsers} loading={loading} />
+          <StatCard
+            title="Total Users"
+            value={stats.totalUsers}
+            loading={loading}
+          />
           <StatCard title="Workers" value={stats.workers} loading={loading} />
           <StatCard title="Services" value={stats.services} loading={loading} />
           <StatCard title="Bookings" value={stats.bookings} loading={loading} />
@@ -104,7 +110,9 @@ function AdminDashboard() {
 
         <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           <div className="px-5 md:px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-slate-900">Recent Bookings</h2>
+            <h2 className="text-xl font-semibold text-slate-900">
+              Recent Bookings
+            </h2>
             <Link
               to="/admin/bookings"
               className="text-sm text-blue-700 hover:text-blue-800 font-medium"
@@ -116,7 +124,9 @@ function AdminDashboard() {
           {loading ? (
             <div className="p-6 text-slate-500">Loading bookings...</div>
           ) : recentBookings.length === 0 ? (
-            <div className="p-6 text-slate-500">No recent bookings available.</div>
+            <div className="p-6 text-slate-500">
+              No recent bookings available.
+            </div>
           ) : (
             <div className="divide-y divide-slate-100">
               {recentBookings.map((booking) => (
@@ -158,7 +168,7 @@ function StatCard({ title, value, loading }) {
     <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
       <p className="text-slate-500 text-sm">{title}</p>
       <p className="text-3xl font-bold text-blue-900 mt-2">
-        {loading ? "--" : value ?? 0}
+        {loading ? "--" : (value ?? 0)}
       </p>
     </div>
   );
