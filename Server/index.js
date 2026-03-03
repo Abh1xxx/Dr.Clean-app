@@ -11,9 +11,9 @@ const app = express();
 // ================= Middleware =================
 app.use(express.json()); // Parse JSON requests
 
-// app.use(cors({
-//   origin: "*"
-// }));
+app.use(cors({
+  origin: "*"
+}));
 
 // app.use(
 //   cors({
@@ -23,15 +23,15 @@ app.use(express.json()); // Parse JSON requests
 // );
 
 
-app.use(
-  cors({
-    origin: [
-      "https://dr-clean-app-x78g.vercel.app",
-      "http://localhost:5173", // keep for local dev
-    ],
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "https://dr-clean-app-x78g.vercel.app",
+//       "http://localhost:5173", // keep for local dev
+//     ],
+//     credentials: true,
+//   }),
+// );
 
 // ================= DB Connection ==============
 dbConnection();
