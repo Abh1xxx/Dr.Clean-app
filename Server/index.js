@@ -21,7 +21,7 @@ app.use(express.json()); // Parse JSON requests
 //     credentials: true,
 //   })
 // );
-const cors = require("cors");
+
 
 app.use(
   cors({
