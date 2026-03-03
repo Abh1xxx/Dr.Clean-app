@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes/router";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./Context/AuthContext";
 import WhatsAppButton from "./Components/WhatsAppButton";
 function App() {
   return (
