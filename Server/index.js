@@ -12,14 +12,25 @@ const app = express();
 app.use(express.json()); // Parse JSON requests
 
 // app.use(cors({
-//   origin: "*" 
+//   origin: "*"
 // }));
+
+// app.use(
+//   cors({
+//     origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+//     credentials: true,
+//   })
+// );
+const cors = require("cors");
 
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+    origin: [
+      "https://dr-clean-app-x78g.vercel.app",
+      "http://localhost:5173", // keep for local dev
+    ],
     credentials: true,
-  })
+  }),
 );
 
 // ================= DB Connection ==============
@@ -36,7 +47,6 @@ app.get("/", (req, res) => {
 
 // ================= Routes =====================
 app.use("/api", router);
-
 
 // ================= Global Error Handler =================
 app.use((error, req, res, next) => {
