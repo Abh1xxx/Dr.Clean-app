@@ -1,8 +1,13 @@
 {
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/"
-        }
-    ]
+  "root": "Client",
+  "builds": [
+    {
+      "src": "Client/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "installCommand": "npm install --prefix Client",
+  "buildCommand": "npm run build --prefix Client",
+  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
 }
