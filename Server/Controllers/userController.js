@@ -3,6 +3,9 @@ const userModel = require("../Models/userModel");
 const uploadToCloudinary = require("../Utilities/imageUpload");
 const createToken = require("../Utilities/loginToken");
 const { hashPassword, comparePassword } = require("../Utilities/passwordUtilities");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // @desc    Register a new user
 // @route   POST /api/v1/users/register
@@ -102,6 +105,63 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+// @desc    Login/Register with Google
+// @route   POST /api/v1/users/google-login
+const googleLoginUser = async (req, res, next) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({ message: "Google credential is required" });
+    }
+
+    if (!process.env.GOOGLE_CLIENT_ID) {
+      return res.status(500).json({ message: "Google auth is not configured" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+
+    if (!email) {
+      return res.status(400).json({ message: "Invalid Google account data" });
+    }
+
+    let user = await userModel.findOne({ email });
+
+    if (!user) {
+      const randomPassword = `${email}-${Date.now()}-${Math.random()}`;
+      const hashedPassword = await hashPassword(randomPassword);
+
+      user = await userModel.create({
+        name: payload.name || email.split("@")[0],
+        email,
+        password: hashedPassword,
+        profilePic: payload.picture,
+        role: "customer",
+      });
+    }
+
+    const token = createToken(user._id, user.role);
+    const userObject = user.toObject();
+    delete userObject.password;
+
+    res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      token,
+      user: userObject,
+    });
+  } catch (error) {
+    console.error("Google login error:", error.message);
+    next(error);
+  }
+};
+
 // @desc    Get user profile
 // @route   GET /api/v1/users/profile
 const getUserProfile = async (req, res, next) => {
@@ -197,6 +257,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   registerUser,
   loginUser,
+  googleLoginUser,
   getUserProfile,
   updateUserProfile,
   deleteUser, 

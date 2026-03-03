@@ -1,6 +1,7 @@
 const {
   registerUser,
   loginUser,
+  googleLoginUser,
   getUserProfile,
   updateUserProfile,
   deleteUser,
@@ -17,6 +18,7 @@ const userRoutes = require('express').Router();
 // Auth
 userRoutes.post("/register",fieldsValidation(["name", "email", "password"]), registerUser);
 userRoutes.post("/login",fieldsValidation([ "email", "password"]), loginUser);
+userRoutes.post("/google-login", googleLoginUser);
 
 // Users
 userRoutes.get("/profile", authMiddleware, getUserProfile);

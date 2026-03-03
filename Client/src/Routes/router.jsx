@@ -35,6 +35,7 @@ import AdminDashboard from "../Pages/AdminDashboard";
 import AdminBlogs from "../Pages/AdminBlogs";
 import AdminProfile from "../Pages/AdminProfile";
 import AdminEditProfile from "../Pages/AdminEditProfile";
+import AdminJobTracker from "../Pages/AdminJobTracker";
 
 export const router = createBrowserRouter([
   {
@@ -174,6 +175,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute role="admin">
             <AdminBookings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/job-tracker",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminJobTracker />
           </ProtectedRoute>
         ),
       },

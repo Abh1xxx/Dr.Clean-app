@@ -5,6 +5,7 @@ const AssignedJob = require("../Models/assignedJobModel");
 const { hashPassword } = require("../Utilities/passwordUtilities");
 
 const ALLOWED_BOOKING_STATUSES = ["pending", "confirmed", "completed", "cancelled"];
+const ALLOWED_ASSIGNED_JOB_STATUSES = ["assigned", "in-progress", "completed"];
 
 // GET ADMIN STATS
 exports.getAdminStats = async (req, res) => {
@@ -189,6 +190,73 @@ exports.getAllWorkers = async (req, res) => {
   } catch (error) {
     console.error("Get workers error:", error.message);
     res.status(500).json({ message: "Failed to fetch workers" });
+  }
+};
+
+// GET ASSIGNED JOB TRACKER (ADMIN)
+exports.getAssignedJobsTracker = async (req, res) => {
+  try {
+    const jobs = await AssignedJob.find()
+      .populate("workerId", "name email phone")
+      .populate({
+        path: "bookingId",
+        populate: [
+          { path: "userId", select: "name email phone" },
+          { path: "serviceId", select: "name price" },
+        ],
+      })
+      .sort({ updatedAt: -1 });
+
+    const summary = {
+      total: jobs.length,
+      assigned: jobs.filter((job) => job.status === "assigned").length,
+      inProgress: jobs.filter((job) => job.status === "in-progress").length,
+      completed: jobs.filter((job) => job.status === "completed").length,
+    };
+
+    res.status(200).json({ jobs, summary });
+  } catch (error) {
+    console.error("Get assigned jobs tracker error:", error.message);
+    res.status(500).json({ message: "Failed to fetch assigned jobs" });
+  }
+};
+
+// UPDATE ASSIGNED JOB STATUS (ADMIN)
+exports.updateAssignedJobStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!ALLOWED_ASSIGNED_JOB_STATUSES.includes(status)) {
+      return res.status(400).json({ message: "Invalid assigned job status" });
+    }
+
+    const job = await AssignedJob.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true, runValidators: true }
+    ).populate({
+      path: "bookingId",
+      populate: [{ path: "userId", select: "name email phone" }, { path: "serviceId", select: "name price" }],
+    });
+
+    if (!job) {
+      return res.status(404).json({ message: "Assigned job not found" });
+    }
+
+    if (job.bookingId) {
+      if (status === "completed") {
+        job.bookingId.status = "completed";
+      } else if (job.bookingId.status === "completed") {
+        job.bookingId.status = "confirmed";
+      }
+      await job.bookingId.save();
+    }
+
+    res.status(200).json({ message: "Assigned job status updated", job });
+  } catch (error) {
+    console.error("Update assigned job status error:", error.message);
+    res.status(500).json({ message: "Failed to update assigned job status" });
   }
 };
 

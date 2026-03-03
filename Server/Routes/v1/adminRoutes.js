@@ -9,6 +9,8 @@ const {
   createWorker,
   updateWorker,
   deleteWorker,
+  getAssignedJobsTracker,
+  updateAssignedJobStatus,
 } = require("../../Controllers/adminController");
 const { authMiddleware } = require("../../Middleware/authMiddleware");
 
@@ -29,6 +31,8 @@ adminRoutes.get("/workers", authMiddleware, adminOnly, getAllWorkers);
 adminRoutes.post("/workers", authMiddleware, adminOnly, createWorker);
 adminRoutes.put("/workers/:id", authMiddleware, adminOnly, updateWorker);
 adminRoutes.delete("/workers/:id", authMiddleware, adminOnly, deleteWorker);
+adminRoutes.get("/jobs/tracker", authMiddleware, adminOnly, getAssignedJobsTracker);
+adminRoutes.put("/jobs/:id/status", authMiddleware, adminOnly, updateAssignedJobStatus);
 
 adminRoutes.put("/bookings/:id/status", authMiddleware, adminOnly, updateBookingStatus);
 adminRoutes.put("/bookings/:id/assign", authMiddleware, adminOnly, assignBookingToWorker);

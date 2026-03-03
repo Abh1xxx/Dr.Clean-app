@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../Axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Signup() {
   const [form, setForm] = useState({
@@ -11,8 +12,80 @@ function Signup() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const googleBtnRef = useRef(null);
+
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const isGoogleConfigured =
+    !!googleClientId && !googleClientId.includes("your_google_web_client_id");
+
+  const navigateByRole = (role) => {
+    if (role === "admin") {
+      navigate("/admin");
+    } else if (role === "worker") {
+      navigate("/worker");
+    } else {
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    if (!isGoogleConfigured || !googleBtnRef.current) return;
+
+    const initGoogle = () => {
+      if (!window.google || !googleBtnRef.current) return;
+
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response) => {
+          try {
+            setGoogleLoading(true);
+
+            const res = await axiosInstance.post("/users/google-login", {
+              credential: response.credential,
+            });
+
+            login(res.data.user, res.data.token);
+            navigateByRole(res.data.user.role);
+          } catch (error) {
+            alert(error.response?.data?.message || "Google signup failed");
+          } finally {
+            setGoogleLoading(false);
+          }
+        },
+      });
+
+      googleBtnRef.current.innerHTML = "";
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        text: "continue_with",
+        width: 320,
+      });
+    };
+
+    if (window.google) {
+      initGoogle();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogle;
+    document.body.appendChild(script);
+
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [isGoogleConfigured, googleClientId, login, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -51,17 +124,18 @@ function Signup() {
           Create Account
         </h2>
 
-        {/* Google Signup Button (UI only) */}
-        <button
-          className="w-full border border-gray-300 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 transition mb-4"
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="google"
-            className="w-5 h-5"
-          />
-          Continue with Google
-        </button>
+        {isGoogleConfigured ? (
+          <div className="mb-4">
+            <div ref={googleBtnRef} className="flex justify-center" />
+            {googleLoading && (
+              <p className="text-center text-sm text-gray-500 mt-2">Signing up with Google...</p>
+            )}
+          </div>
+        ) : (
+          <div className="mb-4 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
+            Google signup is not configured. Set a real <code>VITE_GOOGLE_CLIENT_ID</code> in client env.
+          </div>
+        )}
 
         <div className="flex items-center my-4">
           <div className="flex-1 h-px bg-gray-300"></div>

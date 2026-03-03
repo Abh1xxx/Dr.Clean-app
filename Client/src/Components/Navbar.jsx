@@ -39,6 +39,7 @@ export default function Navbar() {
       { name: "Dashboard", to: "/admin" },
       { name: "Services", to: "/admin/services" },
       { name: "Bookings", to: "/admin/bookings" },
+      { name: "Job Tracker", to: "/admin/job-tracker" },
       { name: "Workers", to: "/admin/workers" },
       { name: "Manage Blogs", to: "/admin/blogs" },
       { name: "Blog", to: "/blog" },
