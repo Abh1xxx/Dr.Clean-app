@@ -11,18 +11,26 @@ const app = express();
 // ================= Middleware =================
 app.use(express.json()); // Parse JSON requests
 
-const allowedOrigins = (process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:5173")
+const normalizeOrigin = (value = "") => value.trim().replace(/\/+$/, "");
+
+const allowedOrigins = (
+  process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:5173,http://127.0.0.1:5173"
+)
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => normalizeOrigin(origin))
   .filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      const requestOrigin = normalizeOrigin(origin || "");
+
+      if (!origin || allowedOrigins.includes(requestOrigin)) {
         return callback(null, true);
       }
-      return callback(new Error("Not allowed by CORS"));
+
+      // Deny cross-origin requests without turning preflight into a 500 error.
+      return callback(null, false);
     },
     credentials: true,
   })
