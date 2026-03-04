@@ -35,14 +35,14 @@ Below are a few example views from the application. Save your images in a `scree
 
 | Description           | Preview                                                          |
 | --------------------- | ---------------------------------------------------------------- |
-| Public homepage       | ![Homepage](screenshots/public home page .png)                   |
-| Login page            | ![Login](screenshots/Login page.png)                             |
-| Signup page           | ![Sign up](screenshots/Sign up page.png)                         |
-| User dashboard        | ![User Dashboard](screenshots/user dashboard.png)                |
-| User booking page     | ![User Booking](screenshots/user booking page.png)               |
-| Admin manage services | ![Admin Services](screenshots/admin manage service page (1).png) |
-| Admin dashboard       | ![Admin Dashboard](screenshots/admin dashboard.png)              |
-| Worker dashboard      | ![Worker Dashboard](screenshots/Worker dashboard.png)            |
+| Public homepage       | ![Homepage](screenshots/public%20home%20page%20.png)                              |
+| Login page            | ![Login](screenshots/Login%20page.png)                                              |
+| Signup page           | ![Sign up](screenshots/Sign%20up%20page.png)                                        |
+| User dashboard        | ![User Dashboard](screenshots/user%20dashboard.png)                                 |
+| User booking page     | ![User Booking](screenshots/user%20booking%20page.png)                              |
+| Admin manage services | ![Admin Services](screenshots/admin%20manage%20service%20page%20%281%29.png)       |
+| Admin dashboard       | ![Admin Dashboard](screenshots/admin%20dashboard.png)                               |
+| Worker dashboard      | ![Worker Dashboard](screenshots/Worker%20dashboard.png)                             |
 
 > 📁 **All screenshot files** are located in the `screenshots/` folder. Filenames include spaces and describe the page; feel free to update this table with any additional views you want to highlight.
 
