@@ -11,27 +11,22 @@ const app = express();
 // ================= Middleware =================
 app.use(express.json()); // Parse JSON requests
 
-app.use(cors({
-  origin: "*"
-}));
+const allowedOrigins = (process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-// app.use(
-//   cors({
-//     origin: [process.env.CLIENT_URL || "http://localhost:5173"],
-//     credentials: true,
-//   })
-// );
-
-
-// app.use(
-//   cors({
-//     origin: [
-//       "https://dr-clean-app-x78g.vercel.app",
-//       "http://localhost:5173", // keep for local dev
-//     ],
-//     credentials: true,
-//   }),
-// );
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 
 // ================= DB Connection ==============
 dbConnection();
@@ -59,14 +54,18 @@ app.use((error, req, res, next) => {
 });
 
 // ================= Server Start =================
-const PORT = process.env.PORT || 5000;
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, (error) => {
-  if (error) {
-    console.error("❌ Server error: ", error);
-  } else {
-    console.log("--------------------------------------------------");
-    console.log(`🚀 Server is running --> http://localhost:${PORT}`);
-    console.log("--------------------------------------------------");
-  }
-});
+  app.listen(PORT, (error) => {
+    if (error) {
+      console.error("Server error:", error);
+    } else {
+      console.log("--------------------------------------------------");
+      console.log(`Server is running --> http://localhost:${PORT}`);
+      console.log("--------------------------------------------------");
+    }
+  });
+}
+
+module.exports = app;
