@@ -33,9 +33,26 @@
 
 import axios from "axios";
 
+const isLocalhost =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1";
+
+const fallbackBaseURL = isLocalhost
+  ? "http://localhost:5000/api/v1"
+  : `${window.location.origin}/api/v1`;
+
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL || fallbackBaseURL;
+
+if (!import.meta.env.VITE_API_BASE_URL && !isLocalhost) {
+  console.warn(
+    "VITE_API_BASE_URL is not set. Using same-origin fallback:",
+    apiBaseURL
+  );
+}
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
-  timeout: 10000, // 10 seconds timeout
+  baseURL: apiBaseURL,
+  timeout: 20000,
 });
 
 // Attach token automatically
