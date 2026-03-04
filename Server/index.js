@@ -20,12 +20,21 @@ const allowedOrigins = (
   .map((origin) => normalizeOrigin(origin))
   .filter(Boolean);
 
+const isVercelOrigin = (origin = "") => {
+  try {
+    const { hostname } = new URL(origin);
+    return hostname.endsWith(".vercel.app");
+  } catch (error) {
+    return false;
+  }
+};
+
 app.use(
   cors({
     origin: (origin, callback) => {
       const requestOrigin = normalizeOrigin(origin || "");
 
-      if (!origin || allowedOrigins.includes(requestOrigin)) {
+      if (!origin || allowedOrigins.includes(requestOrigin) || isVercelOrigin(requestOrigin)) {
         return callback(null, true);
       }
 
