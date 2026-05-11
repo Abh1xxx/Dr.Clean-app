@@ -1,3 +1,383 @@
+# ==============================
+# 1. Employee Salary Records
+# ==============================
+
+import pandas as pd
+
+data = {
+    'Name': ['John', 'Alice', 'Bob', 'David'],
+    'Salary': [45000, 60000, 55000, 40000]
+}
+
+df = pd.DataFrame(data)
+
+print("Employee Dataset")
+print(df.head())
+
+avg_salary = df['Salary'].mean()
+print("Average Salary:", avg_salary)
+
+high_earners = df[df['Salary'] > 50000]
+
+print("Employees with Salary > 50000")
+print(high_earners)
+
+
+# ==============================
+# 2. Diabetes Prediction
+# ==============================
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+data = {
+    'Glucose': [120, 140, 130, 150, 160],
+    'BMI': [25, 30, 28, 35, 32],
+    'Age': [22, 45, 35, 50, 40],
+    'Outcome': [0, 1, 0, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Glucose', 'BMI', 'Age']]
+y = df['Outcome']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+print("\nDiabetes Prediction Accuracy")
+print("Accuracy:", accuracy_score(y_test, predictions))
+
+
+# ==============================
+# 3. Customer Segmentation
+# ==============================
+
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+data = {
+    'Annual_Income': [15, 20, 25, 40, 60, 70],
+    'Spending_Score': [39, 81, 6, 77, 40, 76]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Annual_Income', 'Spending_Score']]
+
+kmeans = KMeans(n_clusters=3)
+
+kmeans.fit(X)
+
+df['Cluster'] = kmeans.labels_
+
+print("\nCustomer Segmentation")
+print(df)
+
+plt.scatter(
+    X['Annual_Income'],
+    X['Spending_Score'],
+    c=kmeans.labels_
+)
+
+plt.xlabel('Annual Income')
+plt.ylabel('Spending Score')
+plt.title('Customer Segments')
+
+plt.show()
+
+
+# ==============================
+# 4. Student Records
+# ==============================
+
+data = {
+    'Name': ['Arun', 'Meera', 'Rahul', 'Anu'],
+    'Marks': [80, 65, 90, 72]
+}
+
+df = pd.DataFrame(data)
+
+print("\nStudent Dataset Information")
+print(df.info())
+
+top_students = df[df['Marks'] > 75]
+
+print("Students scoring above 75")
+print(top_students)
+
+avg_marks = df['Marks'].mean()
+
+print("Average Marks:", avg_marks)
+
+
+# ==============================
+# 5. Loan Default Prediction
+# ==============================
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
+
+data = {
+    'Income': [30000, 50000, 40000, 60000, 35000],
+    'Loan': [10000, 20000, 15000, 25000, 12000],
+    'Age': [25, 45, 35, 50, 28],
+    'Default': [0, 1, 0, 1, 0]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Income', 'Loan', 'Age']]
+y = df['Default']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = KNeighborsClassifier(n_neighbors=3)
+
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+print("\nLoan Default Prediction")
+
+print("Confusion Matrix")
+print(confusion_matrix(y_test, predictions))
+
+print("Accuracy:", accuracy_score(y_test, predictions))
+
+
+# ==============================
+# 6. Marketing Customer Clustering
+# ==============================
+
+data = {
+    'Age': [22, 25, 47, 52, 46, 56],
+    'Annual_Spending': [2000, 3000, 15000, 18000, 16000, 20000]
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Age', 'Annual_Spending']]
+
+kmeans = KMeans(n_clusters=2)
+
+kmeans.fit(X)
+
+print("\nCluster Centroids")
+print(kmeans.cluster_centers_)
+
+plt.scatter(
+    X['Age'],
+    X['Annual_Spending'],
+    c=kmeans.labels_
+)
+
+plt.xlabel('Age')
+plt.ylabel('Annual Spending')
+plt.title('Customer Clusters')
+
+plt.show()
+
+
+
+with csv file
+
+# ==============================
+# 1. Employee Salary Records
+# ==============================
+
+import pandas as pd
+
+# Read CSV file
+df = pd.read_csv('employees.csv')
+
+# Display first 5 rows
+print("Employee Dataset")
+print(df.head())
+
+# Average salary
+avg_salary = df['Salary'].mean()
+print("Average Salary:", avg_salary)
+
+# Employees with salary > 50000
+high_earners = df[df['Salary'] > 50000]
+
+print("Employees with Salary > 50000")
+print(high_earners)
+
+
+# ==============================
+# 2. Diabetes Prediction
+# ==============================
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+data = pd.read_csv('diabetes.csv')
+
+X = data[['Glucose', 'BMI', 'Age']]
+y = data['Outcome']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train Logistic Regression model
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+# Predict
+predictions = model.predict(X_test)
+
+# Accuracy
+print("\nDiabetes Prediction Accuracy")
+print("Accuracy:", accuracy_score(y_test, predictions))
+
+
+# ==============================
+# 3. Customer Segmentation
+# ==============================
+
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Load dataset
+data = pd.read_csv('customers.csv')
+
+X = data[['Annual_Income', 'Spending_Score']]
+
+# Apply K-Means
+kmeans = KMeans(n_clusters=3)
+
+kmeans.fit(X)
+
+# Add cluster labels
+data['Cluster'] = kmeans.labels_
+
+print("\nCustomer Segmentation")
+print(data.head())
+
+# Visualize clusters
+plt.scatter(
+    X['Annual_Income'],
+    X['Spending_Score'],
+    c=kmeans.labels_
+)
+
+plt.xlabel('Annual Income')
+plt.ylabel('Spending Score')
+plt.title('Customer Segments')
+
+plt.show()
+
+
+# ==============================
+# 4. Student Records
+# ==============================
+
+# Read CSV file
+df = pd.read_csv('students.csv')
+
+# Display dataset information
+print("\nStudent Dataset Information")
+print(df.info())
+
+# Students scoring above 75
+top_students = df[df['Marks'] > 75]
+
+print("Students scoring above 75")
+print(top_students)
+
+# Average marks
+avg_marks = df['Marks'].mean()
+
+print("Average Marks:", avg_marks)
+
+
+# ==============================
+# 5. Loan Default Prediction
+# ==============================
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
+
+# Load dataset
+data = pd.read_csv('loan.csv')
+
+X = data[['Income', 'Loan', 'Age']]
+y = data['Default']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train KNN model
+model = KNeighborsClassifier(n_neighbors=3)
+
+model.fit(X_train, y_train)
+
+# Predict
+predictions = model.predict(X_test)
+
+# Confusion Matrix
+print("\nLoan Default Prediction")
+
+print("Confusion Matrix")
+print(confusion_matrix(y_test, predictions))
+
+# Accuracy
+print("Accuracy:", accuracy_score(y_test, predictions))
+
+
+# ==============================
+# 6. Marketing Customer Clustering
+# ==============================
+
+# Load dataset
+data = pd.read_csv('marketing.csv')
+
+X = data[['Age', 'Annual_Spending']]
+
+# Apply K-Means
+kmeans = KMeans(n_clusters=2)
+
+kmeans.fit(X)
+
+# Display centroids
+print("\nCluster Centroids")
+print(kmeans.cluster_centers_)
+
+# Visualize clusters
+plt.scatter(
+    X['Age'],
+    X['Annual_Spending'],
+    c=kmeans.labels_
+)
+
+plt.xlabel('Age')
+plt.ylabel('Annual Spending')
+plt.title('Customer Clusters')
+
+plt.show()
+
+
+
+
 # Dr. Clean Project
 
 **A full‑stack home services platform built with React, Node.js, and MongoDB**
